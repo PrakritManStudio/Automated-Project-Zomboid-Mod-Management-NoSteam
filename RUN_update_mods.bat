@@ -38,6 +38,8 @@ for /f "tokens=*" %%a in (%workshopList%) do (
 rem Remove trailing spaces from "result"
 set "result=!result:~0,-1!"
 
+rmdir /s /q "./steamapps/workshop"
+
 %steamcmdPath% +login anonymous %result% +quit
 
 cd ./steamapps/workshop/content/108600
