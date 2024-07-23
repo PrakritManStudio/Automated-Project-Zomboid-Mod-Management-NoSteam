@@ -9,7 +9,7 @@ set "randomString=%random%%random%%random%"
 
 
 set "workshopList=workshopList.txt"
-set "workshopListURL=https://raw.githubusercontent.com/PrakritManStudio/Automated-Project-Zomboid-Mod-Management-NoSteam/main/workshopList.txt?nocache=%randomString%"
+set "workshopListURL=https://pastebin.com/raw/G858BSRK"
 
 if not "%workshopListURL%"=="" (
     
