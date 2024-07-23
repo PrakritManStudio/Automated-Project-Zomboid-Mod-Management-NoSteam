@@ -2,27 +2,34 @@
 
 setlocal EnableDelayedExpansion
 
-set steamcmdPaht="steamcmd.exe"
-set "wordshopList=wordshopList.txt"
+set "steamcmdPath=steamcmd.exe"
+set "workshopList=workshopList.txt"
 
-rem ประกาศตัวแปรว่างสำหรับเก็บผลลัพธ์
-set "result="
+powershell -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/PrakritManStudio/Automated-Project-Zomboid-Mod-Management-NoSteam/main/workshopList.txt' -OutFile '%workshopList%'"
 
-rem อ่านไฟล์ txt ทีละบรรทัด
-for /f "tokens=*" %%a in (%wordshopList%) do (
-  set "result=!result!+workshop_download_item 108600 %%a "
+if not exist "%workshopList%" (
+    echo "Failed to download workshop list."
+    exit /b 1
 )
 
-rem ลบช่องว่างออกจากท้าย "result"
+rem Declare an empty variable to store results
+set "result="
+
+rem Read the txt file line by line
+for /f "tokens=*" %%a in (%workshopList%) do (
+    set "result=!result!+workshop_download_item 108600 %%a "
+)
+
+rem Remove trailing spaces from "result"
 set "result=!result:~0,-1!"
 
-%steamcmdPaht% +login anonymous %result% +quit
+%steamcmdPath% +login anonymous %result% +quit
 
 cd ./steamapps/workshop/content/108600
 rmdir /s /q "%USERPROFILE%\Zomboid\mods"
 
 for /d %%a in (*) do (
-  xcopy /e /i /y "%%a\mods" "%USERPROFILE%\Zomboid\mods"
+    xcopy /e /i /y "%%a\mods" "%USERPROFILE%\Zomboid\mods"
 )
 
 echo.
