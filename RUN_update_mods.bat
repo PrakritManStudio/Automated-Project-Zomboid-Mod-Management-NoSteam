@@ -3,16 +3,28 @@
 setlocal EnableDelayedExpansion
 
 set "steamcmdPath=steamcmd.exe"
-set "workshopList=workshopList.txt"
 
 rem Generate a random query string to avoid caching
 set "randomString=%random%%random%%random%"
 
-powershell -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/PrakritManStudio/Automated-Project-Zomboid-Mod-Management-NoSteam/main/workshopList.txt?nocache=%randomString%' -Headers @{'Cache-Control'='no-cache'} -OutFile '%workshopList%'"
+
+set "workshopList=workshopList.txt"
+set "workshopListURL=https://raw.githubusercontent.com/PrakritManStudio/Automated-Project-Zomboid-Mod-Management-NoSteam/main/workshopList.txt?nocache=%randomString%"
+
+if not "%workshopListURL%"=="" (
+    
+    del /f /q "%workshopList%"
+    curl -o "workshopList.txt" %workshopListURL%
+    @REM powershell -Command "Invoke-WebRequest -Uri '%workshopListURL%' -Headers @{'Cache-Control'='no-cache'} -OutFile '%workshopList%'"
+)
+
 
 if not exist "%workshopList%" (
-    echo "Failed to download workshop list."
-    exit /b 1
+    if "%workshopListURL%"=="" (
+        echo "Please provide a workshop list URL or file."
+        pause
+        exit /b 1
+    )
 )
 
 rem Declare an empty variable to store results
