@@ -14,7 +14,7 @@ set "workshopListURL=https://pastebin.com/raw/G858BSRK"
 if not "%workshopListURL%"=="" (
     
     del /f /q "%workshopList%"
-    curl -o "workshopList.txt" %workshopListURL%
+    curl -o %workshopList% %workshopListURL%
     @REM powershell -Command "Invoke-WebRequest -Uri '%workshopListURL%' -Headers @{'Cache-Control'='no-cache'} -OutFile '%workshopList%'"
 )
 
